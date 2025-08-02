@@ -32,7 +32,7 @@ func GeneratePDFInvoice(profile model.AppProfile, data model.InvoiceData) *gofpd
 	pdf.SetFont("Arial", "", 10)
 	pdf.Cell(0, 6, "Kepada : PT. Pertamina Patra Niaga")
 	pdf.Ln(6)
-	pdf.Cell(0, 6, "Alamat : Gedung Wisma Tugu II Lt.2, Jl. HR Rasuna Said KAV C7-9 Setiabudi, Jakarta 12920")
+	pdf.MultiCell(0, 6, "Alamat : Gedung Wisma Tugu II Lt.2,\nJl. HR Rasuna Said KAV C7-9 Setiabudi,\nJakarta 12920", "", "L", false)
 	pdf.Ln(8)
 
 	// ===== TANGGAL & NOMOR =====
@@ -42,7 +42,7 @@ func GeneratePDFInvoice(profile model.AppProfile, data model.InvoiceData) *gofpd
 	pdf.Ln(8)
 
 	// ===== TABEL =====
-	colWidths := []float64{10, 80, 25, 35, 35} // No | Keterangan | Kg | Detil | Nilai
+	colWidths := []float64{8, 95, 20, 15, 32} // No | Keterangan | Kg | Detil | Nilai
 
 	pdf.SetFont("Arial", "B", 11)
 	pdf.SetFillColor(220, 220, 220)
