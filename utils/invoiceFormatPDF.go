@@ -42,11 +42,11 @@ func GeneratePDFInvoice(profile model.AppProfile, data model.InvoiceData) *gofpd
 	pdf.Ln(8)
 
 	// ===== TABEL =====
-	colWidths := []float64{8, 95, 20, 23, 37} // No | Keterangan | Kg | Detil | Nilai
+	colWidths := []float64{8, 91, 20, 23, 35} // No | Keterangan | Kg | Detil | Nilai
 
 	pdf.SetFont("Arial", "B", 11)
 	pdf.SetFillColor(220, 220, 220)
-	headers := []string{"No", "Keterangan", "Kg", "Detil", "Nilai"}
+	headers := []string{"No", "Keterangan", "Qty", "Detil", "Nilai"}
 	for i, h := range headers {
 		pdf.CellFormat(colWidths[i], 8, h, "1", 0, "C", true, 0, "")
 	}
