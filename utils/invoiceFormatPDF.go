@@ -33,7 +33,7 @@ func GeneratePDFInvoice(profile model.AppProfile, data model.InvoiceData) *gofpd
 
 	// Nomor dan tanggal invoice
 	pdf.SetFont("Arial", "", 10)
-	pdf.CellFormat(95, 6, "Tanggal: "+data.InvoiceDate, "", 0, "L", false, 0, "")
+	pdf.CellFormat(90, 6, "Tanggal: "+data.InvoiceDate, "", 0, "L", false, 0, "")
 	pdf.SetX(115)
 	pdf.CellFormat(0, 6, "No. Invoice: "+data.InvoiceNumber, "", 1, "R", false, 0, "")
 	pdf.Ln(5)
@@ -42,7 +42,7 @@ func GeneratePDFInvoice(profile model.AppProfile, data model.InvoiceData) *gofpd
 	pdf.SetFont("Arial", "B", 11)
 	pdf.SetFillColor(220, 220, 220) // header abu terang
 	pdf.CellFormat(80, 8, "Deskripsi", "1", 0, "C", true, 0, "")
-	pdf.CellFormat(60, 8, "Nilai", "1", 1, "C", true, 0, "")
+	pdf.CellFormat(50, 8, "Nilai", "1", 1, "C", true, 0, "")
 
 	pdf.SetFont("Arial", "", 11)
 
@@ -65,15 +65,15 @@ func GeneratePDFInvoice(profile model.AppProfile, data model.InvoiceData) *gofpd
 		} else {
 			pdf.SetFillColor(255, 255, 255) // putih
 		}
-		pdf.CellFormat(90, 8, row.Label, "1", 0, "L", true, 0, "")
-		pdf.CellFormat(90, 8, row.Value, "1", 1, "R", true, 0, "")
+		pdf.CellFormat(80, 8, row.Label, "1", 0, "L", true, 0, "")
+		pdf.CellFormat(50, 8, row.Value, "1", 1, "R", true, 0, "")
 		fill = !fill
 	}
 
 	pdf.SetFont("Arial", "B", 11)
 	pdf.SetFillColor(230, 230, 250)
-	pdf.CellFormat(90, 8, "Total", "1", 0, "L", true, 0, "")
-	pdf.CellFormat(90, 8, "Rp. "+humanize.Comma(int64(data.Total)), "1", 1, "R", true, 0, "")
+	pdf.CellFormat(80, 8, "Total", "1", 0, "L", true, 0, "")
+	pdf.CellFormat(50, 8, "Rp. "+humanize.Comma(int64(data.Total)), "1", 1, "R", true, 0, "")
 
 	pdf.Ln(8)
 	pdf.SetFont("Arial", "I", 10)
