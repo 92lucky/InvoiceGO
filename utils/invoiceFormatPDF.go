@@ -20,7 +20,7 @@ func GeneratePDFInvoice(profile model.AppProfile, data model.InvoiceData) *gofpd
 	pdf.CellFormat(0, 5, profile.Alamat+" , "+profile.Kabupaten, "", 1, "C", false, 0, "")
 	pdf.Ln(2)
 	pdf.SetDrawColor(0, 0, 0)
-	pdf.Line(15, pdf.GetY(), 195, pdf.GetY())
+	pdf.Line(15, pdf.GetY(), 195, pdf.GetY()) // garis pembatas header
 	pdf.Ln(6)
 
 	// ===== JUDUL =====
@@ -41,8 +41,8 @@ func GeneratePDFInvoice(profile model.AppProfile, data model.InvoiceData) *gofpd
 	pdf.CellFormat(0, 6, "No. Invoice : "+data.InvoiceNumber, "", 1, "R", false, 0, "")
 	pdf.Ln(8)
 
-	// ===== TABEL 5 KOLOM =====
-	colWidths := []float64{10, 75, 25, 40, 35} // No | Keterangan | Kg | Detil | Nilai
+	// ===== TABEL =====
+	colWidths := []float64{10, 80, 25, 35, 35} // No | Keterangan | Kg | Detil | Nilai
 
 	pdf.SetFont("Arial", "B", 11)
 	pdf.SetFillColor(220, 220, 220)
@@ -52,29 +52,29 @@ func GeneratePDFInvoice(profile model.AppProfile, data model.InvoiceData) *gofpd
 	}
 	pdf.Ln(-1)
 
-	// ===== ISI =====
+	// ===== ISI: 3 baris, Detil di kolom ke-4 =====
 	pdf.SetFont("Arial", "", 10)
-	rows := []struct {
-		No    string
-		Ket   string
-		Kg    string
-		Detil string
-		Nilai string
-	}{
-		{"1", "Tagihan Transport Fee LPG 3 Kg Periode " + data.Periode, humanize.Comma(int64(data.DisplayQty)), "", ""},
-		{"", "", "", "Pokok", "Rp. " + humanize.Comma(int64(data.Pokok))},
-		{"", "", "", "DPP", "Rp. " + humanize.Comma(int64(data.DPP))},
-		{"", "", "", "PPN 12%", "Rp. " + humanize.Comma(int64(data.PPN))},
-	}
 
-	for _, row := range rows {
-		cells := []string{row.No, row.Ket, row.Kg, row.Detil, row.Nilai}
-		aligns := []string{"C", "L", "C", "L", "R"}
-		for i, c := range cells {
-			pdf.CellFormat(colWidths[i], 8, c, "1", 0, aligns[i], false, 0, "")
-		}
-		pdf.Ln(-1)
-	}
+	// Baris 1: Keterangan + KG + Pokok
+	pdf.CellFormat(colWidths[0], 8, "1", "1", 0, "C", false, 0, "")
+	pdf.CellFormat(colWidths[1], 8, "Tagihan Transport Fee LPG 3 Kg Periode "+data.Periode, "1", 0, "L", false, 0, "")
+	pdf.CellFormat(colWidths[2], 8, humanize.Comma(int64(data.DisplayQty)), "1", 0, "C", false, 0, "")
+	pdf.CellFormat(colWidths[3], 8, "Pokok", "1", 0, "L", false, 0, "")
+	pdf.CellFormat(colWidths[4], 8, "Rp. "+humanize.Comma(int64(data.Pokok)), "1", 1, "R", false, 0, "")
+
+	// Baris 2: Detil = DPP
+	pdf.CellFormat(colWidths[0], 8, "", "1", 0, "C", false, 0, "")
+	pdf.CellFormat(colWidths[1], 8, "", "1", 0, "L", false, 0, "")
+	pdf.CellFormat(colWidths[2], 8, "", "1", 0, "C", false, 0, "")
+	pdf.CellFormat(colWidths[3], 8, "DPP", "1", 0, "L", false, 0, "")
+	pdf.CellFormat(colWidths[4], 8, "Rp. "+humanize.Comma(int64(data.DPP)), "1", 1, "R", false, 0, "")
+
+	// Baris 3: Detil = PPN
+	pdf.CellFormat(colWidths[0], 8, "", "1", 0, "C", false, 0, "")
+	pdf.CellFormat(colWidths[1], 8, "", "1", 0, "L", false, 0, "")
+	pdf.CellFormat(colWidths[2], 8, "", "1", 0, "C", false, 0, "")
+	pdf.CellFormat(colWidths[3], 8, "PPN 12%", "1", 0, "L", false, 0, "")
+	pdf.CellFormat(colWidths[4], 8, "Rp. "+humanize.Comma(int64(data.PPN)), "1", 1, "R", false, 0, "")
 
 	// ===== TOTAL =====
 	pdf.SetFont("Arial", "B", 11)
