@@ -12,59 +12,64 @@ func GeneratePDFInvoice(profile model.AppProfile, data model.InvoiceData) *gofpd
 	pdf.SetMargins(15, 15, 15)
 	pdf.AddPage()
 
-	// ===== HEADER =====
+	// ===== HEADER + GARIS =====
 	pdf.SetFont("Arial", "B", 14)
 	pdf.CellFormat(0, 7, profile.NamaPT, "", 1, "C", false, 0, "")
 	pdf.SetFont("Arial", "", 10)
 	pdf.CellFormat(0, 5, "AGEN LPG PSO", "", 1, "C", false, 0, "")
 	pdf.CellFormat(0, 5, profile.Alamat+" , "+profile.Kabupaten, "", 1, "C", false, 0, "")
-	pdf.Ln(8)
+	pdf.Ln(2)
+	pdf.SetDrawColor(0, 0, 0)
+	pdf.Line(15, pdf.GetY(), 195, pdf.GetY())
+	pdf.Ln(6)
 
-	// ===== JUDUL INVOICE =====
+	// ===== JUDUL =====
 	pdf.SetFont("Arial", "B", 16)
 	pdf.CellFormat(0, 10, "INVOICE", "", 1, "C", false, 0, "")
-	pdf.Ln(5)
+	pdf.Ln(6)
 
-	// ===== KE PADA =====
+	// ===== KEPADA =====
 	pdf.SetFont("Arial", "", 10)
 	pdf.Cell(0, 6, "Kepada : PT. Pertamina Patra Niaga")
 	pdf.Ln(6)
 	pdf.Cell(0, 6, "Alamat : Gedung Wisma Tugu II Lt.2, Jl. HR Rasuna Said KAV C7-9 Setiabudi, Jakarta 12920")
 	pdf.Ln(8)
 
-	// ===== TANGGAL & NO INVOICE =====
+	// ===== TANGGAL & NOMOR =====
 	pdf.SetFont("Arial", "", 10)
 	pdf.CellFormat(95, 6, "Tanggal : "+data.InvoiceDate, "", 0, "L", false, 0, "")
 	pdf.CellFormat(0, 6, "No. Invoice : "+data.InvoiceNumber, "", 1, "R", false, 0, "")
 	pdf.Ln(8)
 
-	colWidths := []float64{10, 80, 20, 40, 40} // No | Keterangan | Kg | Harga Satuan | Jumlah
+	// ===== TABEL 5 KOLOM =====
+	colWidths := []float64{10, 75, 25, 40, 35} // No | Keterangan | Kg | Detil | Nilai
 
 	pdf.SetFont("Arial", "B", 11)
 	pdf.SetFillColor(220, 220, 220)
-	headers := []string{"No", "Keterangan", "Kg", "Harga Satuan", "Jumlah"}
+	headers := []string{"No", "Keterangan", "Kg", "Detil", "Nilai"}
 	for i, h := range headers {
 		pdf.CellFormat(colWidths[i], 8, h, "1", 0, "C", true, 0, "")
 	}
 	pdf.Ln(-1)
 
-	// ===== ISI TABEL =====
+	// ===== ISI =====
 	pdf.SetFont("Arial", "", 10)
 	rows := []struct {
 		No    string
 		Ket   string
 		Kg    string
-		Harga string
-		Jml   string
+		Detil string
+		Nilai string
 	}{
-		{"1", "Tagihan Transport Fee LPG 3 Kg Periode " + data.Periode, humanize.Comma(int64(data.DisplayQty)), "-", ""},
-		{"2", "Pokok", "", "Rp. " + humanize.Comma(int64(data.Pokok)), "Rp. " + humanize.Comma(int64(data.Pokok))},
-		{"3", "PPN 12%", "", "-", "Rp. " + humanize.Comma(int64(data.PPN))},
+		{"1", "Tagihan Transport Fee LPG 3 Kg Periode " + data.Periode, humanize.Comma(int64(data.DisplayQty)), "", ""},
+		{"", "", "", "Pokok", "Rp. " + humanize.Comma(int64(data.Pokok))},
+		{"", "", "", "DPP", "Rp. " + humanize.Comma(int64(data.DPP))},
+		{"", "", "", "PPN 12%", "Rp. " + humanize.Comma(int64(data.PPN))},
 	}
 
 	for _, row := range rows {
-		cells := []string{row.No, row.Ket, row.Kg, row.Harga, row.Jml}
-		aligns := []string{"C", "L", "C", "R", "R"}
+		cells := []string{row.No, row.Ket, row.Kg, row.Detil, row.Nilai}
+		aligns := []string{"C", "L", "C", "L", "R"}
 		for i, c := range cells {
 			pdf.CellFormat(colWidths[i], 8, c, "1", 0, aligns[i], false, 0, "")
 		}
