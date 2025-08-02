@@ -9,7 +9,7 @@ import (
 
 func GeneratePDFInvoice(profile model.AppProfile, data model.InvoiceData) *gofpdf.Fpdf {
 	pdf := gofpdf.New("P", "mm", "A4", "")
-	pdf.SetMargins(20, 15, 20)
+	pdf.SetMargins(15, 15, 15)
 	pdf.AddPage()
 
 	// ===== HEADER =====
@@ -25,65 +25,57 @@ func GeneratePDFInvoice(profile model.AppProfile, data model.InvoiceData) *gofpd
 	pdf.CellFormat(0, 10, "INVOICE", "", 1, "C", false, 0, "")
 	pdf.Ln(5)
 
-	// ===== KEPADA =====
+	// ===== KE PADA =====
 	pdf.SetFont("Arial", "", 10)
 	pdf.Cell(0, 6, "Kepada : PT. Pertamina Patra Niaga")
 	pdf.Ln(6)
-	pdf.MultiCell(0, 5, "Alamat : Gedung Wisma Tugu II Lt.2\nJl. HR Rasuna Said KAV C7-9 Setiabudi, Jakarta 12920", "", "", false)
+	pdf.Cell(0, 6, "Alamat : Gedung Wisma Tugu II Lt.2, Jl. HR Rasuna Said KAV C7-9 Setiabudi, Jakarta 12920")
 	pdf.Ln(8)
 
-	// ===== TANGGAL & NOMOR =====
+	// ===== TANGGAL & NO INVOICE =====
 	pdf.SetFont("Arial", "", 10)
 	pdf.CellFormat(95, 6, "Tanggal : "+data.InvoiceDate, "", 0, "L", false, 0, "")
 	pdf.CellFormat(0, 6, "No. Invoice : "+data.InvoiceNumber, "", 1, "R", false, 0, "")
 	pdf.Ln(8)
 
-	// ===== TABEL =====
-	tableWidth := 150.0
-	pageWidth := 210.0
-	margin := 20.0
-	startX := margin + ((pageWidth-2*margin)-tableWidth)/2
+	colWidths := []float64{10, 80, 20, 40, 40} // No | Keterangan | Kg | Harga Satuan | Jumlah
 
-	// Header tabel
 	pdf.SetFont("Arial", "B", 11)
 	pdf.SetFillColor(220, 220, 220)
-	pdf.SetX(startX)
-	pdf.CellFormat(90, 8, "Keterangan", "1", 0, "C", true, 0, "")
-	pdf.CellFormat(30, 8, "Kg", "1", 0, "C", true, 0, "")
-	pdf.CellFormat(30, 8, "Nilai", "1", 1, "C", true, 0, "")
+	headers := []string{"No", "Keterangan", "Kg", "Harga Satuan", "Jumlah"}
+	for i, h := range headers {
+		pdf.CellFormat(colWidths[i], 8, h, "1", 0, "C", true, 0, "")
+	}
+	pdf.Ln(-1)
 
-	// Data tabel
-	pdf.SetFont("Arial", "", 11)
-	fill := false
+	// ===== ISI TABEL =====
+	pdf.SetFont("Arial", "", 10)
 	rows := []struct {
-		Label string
+		No    string
+		Ket   string
 		Kg    string
-		Nilai string
+		Harga string
+		Jml   string
 	}{
-		{"Tagihan Transport Fee LPG 3 Kg Periode " + data.Periode, humanize.Comma(int64(data.DisplayQty)), ""},
-		{"Pokok", "", humanize.Comma(int64(data.Pokok))},
-		{"PPN 12%", "", humanize.Comma(int64(data.PPN))},
+		{"1", "Tagihan Transport Fee LPG 3 Kg Periode " + data.Periode, humanize.Comma(int64(data.DisplayQty)), "-", ""},
+		{"2", "Pokok", "", "Rp. " + humanize.Comma(int64(data.Pokok)), "Rp. " + humanize.Comma(int64(data.Pokok))},
+		{"3", "PPN 12%", "", "-", "Rp. " + humanize.Comma(int64(data.PPN))},
 	}
 
 	for _, row := range rows {
-		if fill {
-			pdf.SetFillColor(245, 245, 245)
-		} else {
-			pdf.SetFillColor(255, 255, 255)
+		cells := []string{row.No, row.Ket, row.Kg, row.Harga, row.Jml}
+		aligns := []string{"C", "L", "C", "R", "R"}
+		for i, c := range cells {
+			pdf.CellFormat(colWidths[i], 8, c, "1", 0, aligns[i], false, 0, "")
 		}
-		pdf.SetX(startX)
-		pdf.CellFormat(90, 8, row.Label, "1", 0, "L", true, 0, "")
-		pdf.CellFormat(30, 8, row.Kg, "1", 0, "C", true, 0, "")
-		pdf.CellFormat(30, 8, row.Nilai, "1", 1, "R", true, 0, "")
-		fill = !fill
+		pdf.Ln(-1)
 	}
 
 	// ===== TOTAL =====
 	pdf.SetFont("Arial", "B", 11)
 	pdf.SetFillColor(230, 230, 250)
-	pdf.SetX(startX)
-	pdf.CellFormat(120, 8, "TOTAL", "1", 0, "R", true, 0, "")
-	pdf.CellFormat(30, 8, "Rp. "+humanize.Comma(int64(data.Total)), "1", 1, "R", true, 0, "")
+	pdf.CellFormat(colWidths[0]+colWidths[1]+colWidths[2]+colWidths[3], 8, "TOTAL", "1", 0, "R", true, 0, "")
+	pdf.CellFormat(colWidths[4], 8, "Rp. "+humanize.Comma(int64(data.Total)), "1", 1, "R", true, 0, "")
 
 	// ===== TERBILANG =====
 	pdf.Ln(8)
@@ -91,7 +83,7 @@ func GeneratePDFInvoice(profile model.AppProfile, data model.InvoiceData) *gofpd
 	pdf.MultiCell(0, 6, "Terbilang : "+Terbilang(int64(data.Total)), "", "", false)
 
 	// ===== BANK =====
-	pdf.Ln(10)
+	pdf.Ln(8)
 	pdf.SetFont("Arial", "", 10)
 	pdf.Cell(0, 6, "Bank : "+profile.NamaBank+" - "+profile.NoRekening)
 	pdf.Ln(6)
