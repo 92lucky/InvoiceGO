@@ -42,7 +42,7 @@ func GeneratePDFInvoice(profile model.AppProfile, data model.InvoiceData) *gofpd
 	pdf.Ln(8)
 
 	// ===== TABEL =====
-	colWidths := []float64{8, 95, 20, 15, 32} // No | Keterangan | Kg | Detil | Nilai
+	colWidths := []float64{8, 95, 20, 23, 37} // No | Keterangan | Kg | Detil | Nilai
 
 	pdf.SetFont("Arial", "B", 11)
 	pdf.SetFillColor(220, 220, 220)
@@ -90,7 +90,9 @@ func GeneratePDFInvoice(profile model.AppProfile, data model.InvoiceData) *gofpd
 	// ===== BANK =====
 	pdf.Ln(8)
 	pdf.SetFont("Arial", "", 10)
-	pdf.Cell(0, 6, "Bank : "+profile.NamaBank+" - "+profile.NoRekening)
+	pdf.Cell(0, 6, "Bank : "+profile.NamaBank)
+	pdf.Ln(6)
+	pdf.Cell(0, 6, "No. Rekening : "+profile.NoRekening)
 	pdf.Ln(6)
 	pdf.Cell(0, 6, "a.n "+profile.NamaPT)
 
