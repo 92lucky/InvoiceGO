@@ -41,8 +41,8 @@ func GeneratePDFInvoice(profile model.AppProfile, data model.InvoiceData) *gofpd
 	// Tabel
 	pdf.SetFont("Arial", "B", 11)
 	pdf.SetFillColor(220, 220, 220) // header abu terang
-	pdf.CellFormat(90, 8, "Deskripsi", "1", 0, "C", true, 0, "")
-	pdf.CellFormat(90, 8, "Nilai", "1", 1, "C", true, 0, "")
+	pdf.CellFormat(80, 8, "Deskripsi", "1", 0, "C", true, 0, "")
+	pdf.CellFormat(60, 8, "Nilai", "1", 1, "C", true, 0, "")
 
 	pdf.SetFont("Arial", "", 11)
 

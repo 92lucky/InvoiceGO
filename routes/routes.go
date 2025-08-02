@@ -1,10 +1,10 @@
 package routes
 
 import (
-	"invoice-go/auth"
-	"invoice-go/handlers"
 	"database/sql"
 	"html/template"
+	"invoice-go/auth"
+	"invoice-go/handlers"
 	"net/http"
 )
 
