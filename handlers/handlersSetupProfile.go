@@ -9,6 +9,17 @@ import (
 	"net/http"
 )
 
+// Struct khusus untuk template (supaya tidak lempar model mentah)
+type setupView struct {
+	Email           string
+	NamaPT          string
+	NamaBank        string
+	NoRekening      string
+	PenanggungJawab string
+	Alamat          string
+	Kabupaten       string
+}
+
 func HandleSetup(tmpl *template.Template) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		session, _ := auth.GetSession(r)
@@ -21,12 +32,28 @@ func HandleSetup(tmpl *template.Template) http.HandlerFunc {
 				// Jika tidak ditemukan, isi struct kosong (Email tetap diisi agar tidak null di form)
 				profile = &model.AppProfile{Email: email}
 			}
-			if err := tmpl.ExecuteTemplate(w, "setup.html", profile); err != nil {
+
+			// mapping profile → setupView (hanya field yang perlu ditampilkan)
+			viewData := setupView{
+				Email:           profile.Email,
+				NamaPT:          profile.NamaPT,
+				NamaBank:        profile.NamaBank,
+				NoRekening:      profile.NoRekening,
+				PenanggungJawab: profile.PenanggungJawab,
+				Alamat:          profile.Alamat,
+				Kabupaten:       profile.Kabupaten,
+			}
+
+			if err := tmpl.ExecuteTemplate(w, "setup.html", viewData); err != nil {
 				http.Error(w, "Template error: "+err.Error(), http.StatusInternalServerError)
 			}
 
 		case http.MethodPost:
-			r.ParseForm()
+			if err := r.ParseForm(); err != nil {
+				http.Error(w, "Invalid form data", http.StatusBadRequest)
+				return
+			}
+
 			profile := model.AppProfile{
 				Email:           email,
 				NamaPT:          r.FormValue("nama_pt"),

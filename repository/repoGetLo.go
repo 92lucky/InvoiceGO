@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"invoice-go/model"
 	"database/sql"
+	"invoice-go/model"
 )
 
 func GetDataLo(db *sql.DB) ([]model.DataRow, error) {
