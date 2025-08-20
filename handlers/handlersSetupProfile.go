@@ -7,6 +7,8 @@ import (
 	"invoice-go/model"
 	"invoice-go/service"
 	"net/http"
+
+	"github.com/gorilla/csrf"
 )
 
 // Struct khusus untuk template (supaya tidak lempar model mentah)
@@ -44,9 +46,10 @@ func HandleSetup(tmpl *template.Template) http.HandlerFunc {
 				Kabupaten:       profile.Kabupaten,
 			}
 
-			if err := tmpl.ExecuteTemplate(w, "setup.html", viewData); err != nil {
-				http.Error(w, "Template error: "+err.Error(), http.StatusInternalServerError)
-			}
+			tmpl.ExecuteTemplate(w, "setup.html", map[string]interface{}{
+				"csrfField": csrf.TemplateField(r),
+				"profile":   viewData,
+			})
 
 		case http.MethodPost:
 			if err := r.ParseForm(); err != nil {

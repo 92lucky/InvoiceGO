@@ -1,10 +1,10 @@
 package handlers
 
 import (
-	"invoice-go/auth"
-	"invoice-go/repository"
 	"database/sql"
 	"html/template"
+	"invoice-go/auth"
+	"invoice-go/repository"
 	"net/http"
 )
 
@@ -18,6 +18,6 @@ func HandleIndex(tmpl *template.Template, db *sql.DB) http.HandlerFunc {
 			http.Redirect(w, r, "/setup", http.StatusSeeOther)
 			return
 		}
-		tmpl.ExecuteTemplate(w, "index.html", nil)
+		tmpl.ExecuteTemplate(w, "index.html", r)
 	}
 }
