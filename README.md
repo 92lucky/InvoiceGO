@@ -17,8 +17,12 @@ https://youtu.be/DrMlzEFmyto?si=L2B3OkGbR56zVQP5)
 - ✅ JSON error response from API
 - ✅ Clean & scalable folder structure
 - ✅ Ready to extend with database integration
-
----
+- 
+## Technical Implementation
+- ✅ JSON error response from API
+- ✅ Clean & scalable folder structure
+- ✅ Ready to extend with database integration
+- ✅ CSRF Protection
 
 
 ---
