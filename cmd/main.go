@@ -10,7 +10,6 @@ import (
 	"os"
 
 	"github.com/dustin/go-humanize"
-	"github.com/gorilla/csrf"
 	"github.com/joho/godotenv"
 )
 
@@ -35,11 +34,6 @@ func main() {
 		"formatRupiah": func(n float64) string {
 			return humanize.Comma(int64(n))
 		},
-		// Token untuk dimasukkan di form
-		"csrfField": func(r *http.Request) template.HTML {
-			// ini bikin hidden input otomatis
-			return csrf.TemplateField(r)
-		},
 	}).ParseGlob("templates/*.html"))
 
 	// Koneksi DB
@@ -54,19 +48,13 @@ func main() {
 	auth.RegisterAuthRoutes(mux)
 	routes.RegisterAppRoutes(mux, tmpl, config.DB)
 
-	// CSRF middleware
-	CSRF := csrf.Protect(
-		[]byte(os.Getenv("SESSION_KEY")), // pakai session key, minimal 32 byte
-		csrf.Secure(false),               // false untuk local dev (http), true di production (https)
-	)
-
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
 	}
 	log.Printf("✅ Server berjalan di http://localhost:%s\n", port)
 
-	err := http.ListenAndServe(":"+port, CSRF(mux))
+	err := http.ListenAndServe(":"+port, mux)
 	if err != nil {
 		log.Fatalf("❌ Gagal menjalankan server: %v", err)
 	}

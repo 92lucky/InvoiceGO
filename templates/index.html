@@ -12,7 +12,6 @@
       <h1>Invoice Generator</h1>
 
       <form hx-post="/generate" hx-target="#invoice" hx-swap="innerHTML">
-        {{ csrfField . }}
         <div class="form-group">
           <label>No Invoice:</label>
           <input name="invoice_number" required />

@@ -5,16 +5,13 @@ import (
 	"invoice-go/service"
 	"invoice-go/utils"
 	"net/http"
-
-	"github.com/gorilla/csrf"
 )
 
 // handlers/lo.go
 func ShowLoPage(tmpl *template.Template) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		tmpl.ExecuteTemplate(w, "lo.html", map[string]interface{}{
-			"csrfField": csrf.TemplateField(r),
-		})
+		tmpl.ExecuteTemplate(w, "lo.html", nil)
+
 	}
 }
 

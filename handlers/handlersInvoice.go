@@ -4,8 +4,6 @@ import (
 	"html/template"
 	"invoice-go/service"
 	"net/http"
-
-	"github.com/gorilla/csrf"
 )
 
 func HandlersInvoice(tmpl *template.Template) http.HandlerFunc {
@@ -17,10 +15,7 @@ func HandlersInvoice(tmpl *template.Template) http.HandlerFunc {
 				return
 			}
 
-			tmpl.ExecuteTemplate(w, "invoice.html", map[string]interface{}{
-				"csrfField": csrf.TemplateField(r),
-				"data":      data, // kalau perlu
-			})
+			tmpl.ExecuteTemplate(w, "invoice.html", data)
 
 			return
 		}
