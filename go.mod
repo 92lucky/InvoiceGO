@@ -1,6 +1,6 @@
 module invoice-go
 
-go 1.23.3
+go 1.23
 
 require github.com/jung-kurt/gofpdf v1.16.2 // direct
 
