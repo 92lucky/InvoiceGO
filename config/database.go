@@ -4,36 +4,27 @@ import (
 	"database/sql"
 	"log"
 	"os"
-	"time"
 
 	_ "github.com/lib/pq"
 )
 
-var DB *sql.DB // Ini untuk dipakai dari file lain: config.DB
+var DB *sql.DB // Global DB instance
 
 func Init() {
-	var err error
 	connStr := os.Getenv("DATABASE_URL")
-
-	maxRetries := 10
-	for i := 0; i < maxRetries; i++ {
-		db, err := sql.Open("postgres", connStr)
-		if err != nil {
-			log.Println("Gagal buka koneksi DB:", err)
-		} else {
-			err = db.Ping()
-			if err == nil {
-				log.Println("Koneksi DB berhasil")
-				DB = db // <-- SIMPAN ke global var
-				return
-			}
-			log.Println("Ping DB gagal:", err)
-			db.Close()
-		}
-
-		log.Printf("Coba konek DB lagi (%d/%d)...", i+1, maxRetries)
-		time.Sleep(2 * time.Second)
+	if connStr == "" {
+		log.Fatal("❌ DATABASE_URL belum di-set di environment variables")
 	}
 
-	log.Fatal("DB tidak merespon setelah beberapa percobaan:", err)
+	db, err := sql.Open("postgres", connStr)
+	if err != nil {
+		log.Fatalf("❌ Gagal buka koneksi DB: %v", err)
+	}
+
+	if err := db.Ping(); err != nil {
+		log.Fatalf("❌ Gagal ping DB: %v", err)
+	}
+
+	log.Println("✅ Koneksi DB berhasil")
+	DB = db
 }

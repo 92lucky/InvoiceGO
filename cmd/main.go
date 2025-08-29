@@ -54,6 +54,7 @@ func main() {
 	}
 	log.Printf("✅ Server berjalan di http://localhost:%s\n", port)
 
+	// Jalankan server tanpa CSRF
 	err := http.ListenAndServe(":"+port, mux)
 	if err != nil {
 		log.Fatalf("❌ Gagal menjalankan server: %v", err)
