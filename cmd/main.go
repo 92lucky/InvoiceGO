@@ -16,47 +16,44 @@ import (
 func main() {
 	// Load .env
 	if err := godotenv.Load(".env"); err != nil {
-		log.Println("🔔 Tidak bisa load .env (mungkin karena running di Railway):", err)
-	} else {
-		log.Println("✅ .env berhasil dimuat")
+		log.Println("Could not load .env")
 	}
 
-	// Pastikan SESSION_KEY ada
+	// Check SESSION_KEY
 	if os.Getenv("SESSION_KEY") == "" {
-		log.Fatal("❌ SESSION_KEY belum di-set! Set di .env atau di Railway environment variables.")
+		log.Fatal("SESSION_KEY missing")
 	}
 
-	// Inisialisasi session
+	// Init session
 	auth.InitSession()
 
-	// Fungsi template
+	// Templates
 	tmpl := template.Must(template.New("").Funcs(template.FuncMap{
 		"formatRupiah": func(n float64) string {
 			return humanize.Comma(int64(n))
 		},
 	}).ParseGlob("templates/*.html"))
 
-	// Koneksi DB
+	// DB
 	config.Init()
 	defer config.DB.Close()
 
-	// Inisialisasi OAuth
+	// OAuth
 	auth.InitOAuthConfig()
 
-	// Routing
+	// Routes
 	mux := http.NewServeMux()
 	auth.RegisterAuthRoutes(mux)
 	routes.RegisterAppRoutes(mux, tmpl, config.DB)
 
+	// Server
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
 	}
-	log.Printf("✅ Server berjalan di http://localhost:%s\n", port)
+	log.Printf("Server running at http://localhost:%s", port)
 
-	// Jalankan server tanpa CSRF
-	err := http.ListenAndServe(":"+port, mux)
-	if err != nil {
-		log.Fatalf("❌ Gagal menjalankan server: %v", err)
+	if err := http.ListenAndServe(":"+port, mux); err != nil {
+		log.Fatal("Server failed:", err)
 	}
 }
