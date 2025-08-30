@@ -1,29 +1,23 @@
 # 🧾 InvoiceGO - PDF Invoice Generator in Go
 
-**InvoiceGO** is an internal supporting tool for PT PERTAMINA’s main application, designed to efficiently generate PDF invoices. Built with Go (Golang), it supports both invoice generation and download. The system also extracts raw Excel data from the main web application to generate Laporan Operasional (Operational Reports), enhanced with additional fields such as vendor name headers and total price/tax summaries. [🎥 Demo Aplikasi](
+**InvoiceGO**“This internal tool enhances PT PERTAMINA’s main operations by making invoice management faster and more efficient. It simplifies the process of generating invoices and creating detailed Operational Reports, helping teams save time, stay organized, and maintain accuracy.”. [🎥 Demo Aplikasi](
 https://youtu.be/DrMlzEFmyto?si=L2B3OkGbR56zVQP5)
 
 ---
 
-## 🚀 Features
+##  Features
+- ✅ Invoice generator
+- ✅ Operational Report generator
 
+## Technical Implementation
 - ✅ Google Outh Login
 - ✅ Generate invoice PDF from form input
-- ✅ Preview invoice in browser
-- ✅ Download invoice as PDF
-- ✅ Input validation: numbers only, required fields
-- ✅ Extract raw excel data LO
-- ✅ Generate LO with Add vendor name heading & total cell
-- ✅ JSON error response from API
-- ✅ Clean & scalable folder structure
-- ✅ Ready to extend with database integration
-- 
-## Technical Implementation
-- ✅ JSON error response from API
-- ✅ Clean & scalable folder structure
-- ✅ Ready to extend with database integration
-- ✅ CSRF Protection
-
+- ✅ Preview/Download PDF
+- ✅ Extract/parsing raw excel LO & Add vendor name heading & total cell
+- ✅ Clean/scalable folder structure
+- ✅ CI/CD Pipeline
+- ✅ Docker,DockerHub
+- ✅ Production Ready / Deployment
 
 ---
 
