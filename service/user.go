@@ -2,8 +2,8 @@ package service
 
 import (
 	"database/sql"
-	"invoice-go/model"
-	"invoice-go/repository"
+	"invoice-go/internal/model"
+	"invoice-go/internal/repository"
 )
 
 func LoadProfileByEmail(db *sql.DB, email string) (*model.AppProfile, error) {
