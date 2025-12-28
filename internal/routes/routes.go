@@ -3,8 +3,8 @@ package routes
 import (
 	"database/sql"
 	"html/template"
-	"invoice-go/auth"
-	"invoice-go/handlers"
+	"invoice-go/internal/auth"
+	"invoice-go/internal/handlers"
 	"net/http"
 )
 

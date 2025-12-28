@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"html/template"
-	"invoice-go/service"
+	"invoice-go/internal/service"
 	"invoice-go/utils"
 	"net/http"
 )
@@ -36,14 +36,14 @@ func DownloadLoHandler() http.HandlerFunc {
 }
 
 func HandleGeneratePDF(w http.ResponseWriter, r *http.Request, isDownload bool) {
-	form, err := utils.ParseInvoiceForm(r)
+	form, err := utils.ParseReportForm(r)
 	if err != nil {
 		http.Error(w, "Gagal parsing form: "+err.Error(), http.StatusBadRequest)
 		return
 	}
 	defer form.File.Close()
 
-	data, err := service.ParseExcelToDataRows(form.File)
+	data, err := service.ParseExcelToDataRow(form.File)
 	bulan := r.FormValue("bulan")
 
 	if err != nil || len(data) == 0 {

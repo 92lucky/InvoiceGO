@@ -2,8 +2,10 @@ package auth
 
 import (
 	"encoding/json"
+
 	"invoice-go/config"
-	"invoice-go/repository"
+	"invoice-go/internal/repository"
+
 	"net/http"
 	"os"
 
@@ -25,6 +27,7 @@ func InitSession() {
 		Path:     "/",
 		MaxAge:   86400 * 7,
 		HttpOnly: true,
+		Secure:   false,
 	}
 }
 
@@ -44,12 +47,12 @@ func InitOAuthConfig() {
 }
 
 func RegisterAuthRoutes(mux *http.ServeMux) {
-	mux.HandleFunc("/login", handleLogin)
-	mux.HandleFunc("/callback", handleCallback)
-	mux.HandleFunc("/logout", handleLogout)
+	mux.HandleFunc("/login", HandleLogin)
+	mux.HandleFunc("/callback", HandleCallback)
+	mux.HandleFunc("/logout", HandleLogout)
 }
 
-func handleLogin(w http.ResponseWriter, r *http.Request) {
+func HandleLogin(w http.ResponseWriter, r *http.Request) {
 	returnTo := r.URL.Query().Get("returnTo")
 	if returnTo == "" {
 		returnTo = "/index"
@@ -63,13 +66,14 @@ func handleLogin(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, url, http.StatusTemporaryRedirect)
 }
 
-func handleCallback(w http.ResponseWriter, r *http.Request) {
+func HandleCallback(w http.ResponseWriter, r *http.Request) {
 	code := r.URL.Query().Get("code")
 	if code == "" {
 		http.Error(w, "Kode tidak ditemukan di callback", http.StatusBadRequest)
 		return
 	}
 
+	// Tukar kode dengan token
 	token, err := googleOauthConfig.Exchange(r.Context(), code)
 	if err != nil {
 		http.Error(w, "Gagal menukar kode dengan token: "+err.Error(), http.StatusInternalServerError)
@@ -96,34 +100,25 @@ func handleCallback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// ✅ Simpan ke session
-	session, err := Store.Get(r, "session")
-	if err != nil {
-		http.Error(w, "Gagal ambil session", http.StatusInternalServerError)
-		return
-	}
-
+	// ✅ Set session authenticated
+	session, _ := Store.Get(r, "session")
 	session.Values["authenticated"] = true
 	session.Values["email"] = email
-	if err := session.Save(r, w); err != nil {
-		http.Error(w, "Gagal simpan session", http.StatusInternalServerError)
-		return
-	}
+	session.Save(r, w)
 
-	// ✅ Cek apakah user sudah pernah isi profil
-	// ✅ Cek apakah user sudah isi profil lengkap
-
+	// ✅ Cek profil user
 	profile, err := repository.GetUserEmail(config.DB, email)
 	if err != nil || profile.NamaPT == "" {
 		http.Redirect(w, r, "/setup", http.StatusSeeOther)
 		return
 	}
 
+	// Redirect ke index
 	http.Redirect(w, r, "/index", http.StatusSeeOther)
-
 }
 
-func handleLogout(w http.ResponseWriter, r *http.Request) {
+
+func HandleLogout(w http.ResponseWriter, r *http.Request) {
 	session, _ := Store.Get(r, "session")
 	session.Values["authenticated"] = false
 	session.Save(r, w)

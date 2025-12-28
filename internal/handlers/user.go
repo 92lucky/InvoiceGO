@@ -2,16 +2,16 @@ package handlers
 
 import (
 	"html/template"
-	"invoice-go/auth"
 	"invoice-go/config"
-	"invoice-go/model"
-	"invoice-go/service"
+	"invoice-go/internal/auth"
+	"invoice-go/internal/model"
+	"invoice-go/internal/service"
 	"net/http"
 
 	"github.com/gorilla/csrf"
 )
 
-// Struct khusus untuk template (supaya tidak lempar model mentah)
+// setup user profile
 type setupView struct {
 	Email           string
 	NamaPT          string

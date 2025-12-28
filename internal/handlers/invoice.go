@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"html/template"
-	"invoice-go/service"
+	"invoice-go/internal/service"
 	"net/http"
 )
 

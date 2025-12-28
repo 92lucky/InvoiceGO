@@ -2,10 +2,10 @@ package service
 
 import (
 	"fmt"
-	"invoice-go/auth"
 	"invoice-go/config"
-	"invoice-go/model"
-	"invoice-go/repository"
+	"invoice-go/internal/auth"
+	"invoice-go/internal/model"
+	"invoice-go/internal/repository"
 	"invoice-go/utils"
 	"net/http"
 	"strconv"
@@ -71,7 +71,7 @@ func GenerateInvoicePDF(w http.ResponseWriter, r *http.Request, isDownload bool)
 		Total:         total,
 	}
 
-	pdf := utils.GeneratePDFInvoice(*profile, data)
+	pdf := utils.GeneratePDFInvoice(*model.AppProfile(profile), data)
 
 	w.Header().Set("Content-Type", "application/pdf")
 	if isDownload {

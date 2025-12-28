@@ -21,3 +21,5 @@ func RequireAuth(next http.HandlerFunc) http.HandlerFunc {
 func GetSession(r *http.Request) (*sessions.Session, error) {
 	return Store.Get(r, "session")
 }
+
+

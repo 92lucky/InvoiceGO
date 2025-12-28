@@ -2,7 +2,7 @@ package test
 
 import (
 	"bytes"
-	"invoice-go/handlers"
+	"invoice-go/internal/handlers"
 	"io"
 	"mime/multipart"
 	"net/http"

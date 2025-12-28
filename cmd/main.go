@@ -2,22 +2,20 @@ package main
 
 import (
 	"html/template"
-	"invoice-go/auth"
 	"invoice-go/config"
-	"invoice-go/routes"
+	"invoice-go/internal/auth"
+	"invoice-go/internal/routes"
+
 	"log"
 	"net/http"
 	"os"
 
 	"github.com/dustin/go-humanize"
-	"github.com/joho/godotenv"
 )
 
 func main() {
 	// Load .env
-	if err := godotenv.Load(".env"); err != nil {
-		log.Println("Could not load .env")
-	}
+	config.LoadEnv()
 
 	// Check SESSION_KEY
 	if os.Getenv("SESSION_KEY") == "" {

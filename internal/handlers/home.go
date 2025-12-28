@@ -3,10 +3,18 @@ package handlers
 import (
 	"database/sql"
 	"html/template"
-	"invoice-go/auth"
-	"invoice-go/repository"
+	"invoice-go/internal/auth"
+	"invoice-go/internal/repository"
 	"net/http"
 )
+
+func HandleHome(tmpl *template.Template) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		tmpl.ExecuteTemplate(w, "home.html", nil)
+	}
+}
+
+
 
 func HandleIndex(tmpl *template.Template, db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {

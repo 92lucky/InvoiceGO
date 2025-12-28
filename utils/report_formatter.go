@@ -6,21 +6,22 @@ import (
 	"time"
 )
 
-type InvoiceForm struct {
+//report parsing
+type ReportForm struct {
 	NamaPT string
 	Bulan  string
 	File   multipart.File
 }
 
-func ParseInvoiceForm(r *http.Request) (InvoiceForm, error) {
+func ParseReportForm(r *http.Request) (ReportForm, error) {
 	err := r.ParseMultipartForm(10 << 20)
 	if err != nil {
-		return InvoiceForm{}, err
+		return ReportForm{}, err
 	}
 
 	file, _, err := r.FormFile("file")
 	if err != nil {
-		return InvoiceForm{}, err
+		return ReportForm{}, err
 	}
 
 	namaPT := r.FormValue("namapt")
@@ -29,7 +30,7 @@ func ParseInvoiceForm(r *http.Request) (InvoiceForm, error) {
 		bulan = time.Now().Format("January 2006")
 	}
 
-	return InvoiceForm{
+	return ReportForm{
 		NamaPT: namaPT,
 		Bulan:  bulan,
 		File:   file,

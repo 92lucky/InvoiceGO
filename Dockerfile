@@ -19,6 +19,8 @@ WORKDIR /root/
 
 # Copy binary dari tahap builder
 COPY --from=builder /app/invoice-app .
+HEALTHCHECK --interval=30s CMD wget --spider http://localhost:8080 || exit 1
+
 
 # ✅ Copy folder templates agar available saat runtime
 COPY --from=builder /app/templates ./templates

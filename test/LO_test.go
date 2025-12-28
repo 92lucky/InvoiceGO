@@ -2,7 +2,7 @@ package test
 
 import (
 	"bytes"
-	"invoice-go/service"
+	"invoice-go/internal/service"
 	"io"
 	"mime/multipart"
 	"os"
@@ -93,7 +93,7 @@ func TestParseExcelToDataRows(t *testing.T) {
 	defer file.Close()
 	defer os.Remove(file.(*os.File).Name())
 
-	data, err := service.ParseExcelToDataRows(file)
+	data, err := service.ParseExcelToDataRow(file)
 	if err != nil {
 		t.Fatalf("ParseExcelToDataRows error: %v", err)
 	}

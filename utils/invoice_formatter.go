@@ -1,12 +1,30 @@
 package utils
 
 import (
-	"invoice-go/model"
+	"invoice-go/internal/model"
+	"strings"
 
 	"github.com/dustin/go-humanize"
 	"github.com/jung-kurt/gofpdf"
 )
 
+// rupiah formatter
+func Formatt(num float64) string {
+	rounded := int64(num)
+	s := humanize.Comma(rounded)
+	s = strings.Replace(s, ",", ".", -1)
+	return s
+}
+
+func FormatRupiah(num float64) string {
+	s := humanize.CommafWithDigits(num, 2) // pakai 2 desimal
+	s = strings.Replace(s, ",", "_", -1)
+	s = strings.Replace(s, ".", ",", -1)
+	s = strings.Replace(s, "_", ".", -1)
+	return s
+}
+
+//formatter pdf
 func GeneratePDFInvoice(profile model.AppProfile, data model.InvoiceData) *gofpdf.Fpdf {
 	pdf := gofpdf.New("P", "mm", "A4", "")
 	pdf.SetMargins(15, 15, 15)
@@ -42,7 +60,7 @@ func GeneratePDFInvoice(profile model.AppProfile, data model.InvoiceData) *gofpd
 	pdf.Ln(8)
 
 	// ===== TABEL =====
-	colWidths := []float64{8, 91, 20, 23, 35} // No | Keterangan | Kg | Detil | Nilai
+	colWidths := []float64{8, 94, 20, 23, 35} // No | Keterangan | Kg | Detil | Nilai
 
 	pdf.SetFont("Arial", "B", 11)
 	pdf.SetFillColor(220, 220, 220)
@@ -104,3 +122,4 @@ func GeneratePDFInvoice(profile model.AppProfile, data model.InvoiceData) *gofpd
 
 	return pdf
 }
+

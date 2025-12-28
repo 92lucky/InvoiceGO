@@ -1,6 +1,25 @@
 package utils
 
-import "strings"
+import (
+	"math"
+	"strings"
+)
+
+//invoice count
+func HitungTagihan(qtyKg, dpp float64) (displayQty, pokok, ppn, dppOut, total float64) {
+	const (
+		hargaSatuan  = 560.0
+		pengali      = 3.0
+		hargaPerGram = 354.64
+	)
+
+	displayQty = qtyKg * hargaSatuan * pengali
+	pokok = displayQty * hargaPerGram
+	ppn = math.Round(dpp * 0.12)
+	dppOut = dpp
+	total = pokok + ppn
+	return
+}
 
 func Terbilang(n int64) string {
 	angka := [...]string{"", "Satu", "Dua", "Tiga", "Empat", "Lima", "Enam", "Tujuh", "Delapan", "Sembilan"}
