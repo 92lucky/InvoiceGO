@@ -29,6 +29,7 @@ func HandleSetup(tmpl *template.Template) http.HandlerFunc {
 
 		switch r.Method {
 		case http.MethodGet:
+			
 			profile, err := service.LoadProfileByEmail(config.DB, email)
 			if err != nil {
 				// Jika tidak ditemukan, isi struct kosong (Email tetap diisi agar tidak null di form)
@@ -72,7 +73,43 @@ func HandleSetup(tmpl *template.Template) http.HandlerFunc {
 				return
 			}
 
-			http.Redirect(w, r, "/index", http.StatusSeeOther)
+			session.Values["success"] = true
+		session.Save(r, w)
+
+			http.Redirect(w, r, "/invoice-form", http.StatusSeeOther)
 		}
+	}
+}
+
+
+//reset
+func HandleResetSetup() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		// hanya POST (biar gak kepencet via URL)
+		if r.Method != http.MethodPost {
+			http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+			return
+		}
+
+		// ambil session
+		session, _ := auth.GetSession(r)
+		email, ok := session.Values["email"].(string)
+		if !ok || email == "" {
+			http.Redirect(w, r, "/login", http.StatusSeeOther)
+			return
+		}
+
+		// 🔥 RESET SETUP (DELETE)
+		if err := service.ResetProfileByEmail(config.DB, email); err != nil {
+			http.Error(w, "Gagal reset setup: "+err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		// hapus session (biar alurnya bersih)
+		session.Options.MaxAge = -1
+		session.Save(r, w)
+
+		// login ulang → pasti ke /setup
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
 	}
 }

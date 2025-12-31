@@ -10,7 +10,7 @@ import (
 // handlers/lo.go
 func ShowLoPage(tmpl *template.Template) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		tmpl.ExecuteTemplate(w, "lo.html", r)
+		tmpl.ExecuteTemplate(w, "report.html", r)
 
 	}
 }

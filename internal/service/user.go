@@ -18,3 +18,7 @@ func IsUserProfileExist(db *sql.DB, email string) bool {
 	_, err := repository.GetUserEmail(db, email)
 	return err == nil
 }
+
+func ResetProfileByEmail(db *sql.DB, email string) error {
+	return repository.ResetUserProfile(db, email)
+}

@@ -6,48 +6,61 @@
 
     <link rel="stylesheet" href="/static/style.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
   </head>
+
+  <style>
+    .alert-success {
+      background: #e8f7ee;
+      color: #1e7f4f;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      border: 1px solid #bfe8d0;
+      font-size: 14px;
+    }
+  </style>
 
   <body>
     <div class="container">
       <h1>Edit Profil</h1>
 
+      {{if .success}}
+      <div class="alert-success">✔ Profil berhasil disimpan</div>
+      {{end}}
+
       <form method="POST" action="/setup">
-       
         <div class="form-group">
           <label>Nama PT:</label>
-          <input name="nama_pt" value="{{.NamaPT}}" required />
+          <input name="nama_pt" value="{{.profile.NamaPT}}" required />
         </div>
 
         <div class="form-group">
           <label>Nama Bank:</label>
-          <input name="nama_bank" value="{{.NamaBank}}" required />
+          <input name="nama_bank" value="{{.profile.NamaBank}}" required />
         </div>
 
         <div class="form-group">
           <label>No. Rekening:</label>
-          <input name="no_rekening" value="{{.NoRekening}}" required />
+          <input name="no_rekening" value="{{.profile.NoRekening}}" required />
         </div>
 
         <div class="form-group">
           <label>Penanggung Jawab:</label>
           <input
             name="penanggung_jawab"
-            value="{{.PenanggungJawab}}"
+            value="{{.profile.PenanggungJawab}}"
             required
           />
         </div>
 
         <div class="form-group">
           <label>Alamat:</label>
-          <input name="alamat" value="{{.Alamat}}" required />
+          <input name="alamat" value="{{.profile.Alamat}}" required />
         </div>
 
         <div class="form-group">
           <label>Kota/Kab.:</label>
-          <input name="kabupaten" value="{{.Kabupaten}}" required />
+          <input name="kabupaten" value="{{.profile.Kabupaten}}" required />
         </div>
         <div>
           <button type="submit">Simpan</button>
@@ -56,7 +69,13 @@
     </div>
 
     <div class="text-center mt-4">
-      <a href="/">Home</a>
+      <a href="/dashboard">Dashboard</a>
     </div>
   </body>
+  <script>
+    setTimeout(() => {
+      const el = document.querySelector(".alert-success");
+      if (el) el.remove();
+    }, 3000);
+  </script>
 </html>

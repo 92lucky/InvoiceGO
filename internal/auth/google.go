@@ -55,7 +55,7 @@ func RegisterAuthRoutes(mux *http.ServeMux) {
 func HandleLogin(w http.ResponseWriter, r *http.Request) {
 	returnTo := r.URL.Query().Get("returnTo")
 	if returnTo == "" {
-		returnTo = "/index"
+		returnTo = "/dashboard"
 	}
 
 	session, _ := Store.Get(r, "session")
@@ -113,8 +113,8 @@ func HandleCallback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Redirect ke index
-	http.Redirect(w, r, "/index", http.StatusSeeOther)
+	// Redirect ke invoice-form
+	http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
 }
 
 
@@ -122,5 +122,5 @@ func HandleLogout(w http.ResponseWriter, r *http.Request) {
 	session, _ := Store.Get(r, "session")
 	session.Values["authenticated"] = false
 	session.Save(r, w)
-	http.Redirect(w, r, "/login", http.StatusSeeOther)
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }

@@ -1,0 +1,157 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", sans-serif;
+  background-color: #dbe4ee;
+  color: #3533a8;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+.container {
+  width: 100%;
+  max-width: 900px;
+  background-color: #ffffff;
+  border-radius: 14px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* === TOP BAR === */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  font-size: 0.85rem;
+}
+
+.app-name {
+  font-weight: 600;
+  color: #3533a8;
+}
+
+/* === PROFILE DROPDOWN === */
+.profile-wrapper {
+  position: relative;
+}
+
+.profile-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #5887eb;
+  color: #fff;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.profile-menu {
+  position: absolute;
+  right: 0;
+  top: 46px;
+  background: #ffffff;
+  border: 1px solid #d6ddeb;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  min-width: 160px;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 100;
+}
+
+.profile-menu a {
+  padding: 10px 14px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  color: #3533a8;
+}
+
+.profile-menu a:hover {
+  background-color: #f5f7fb;
+}
+
+.profile-menu .danger {
+  color: #e53935;
+}
+
+h1 {
+  text-align: center;
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+  color: #e53935;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.2rem;
+}
+
+.card {
+  background-color: #f5f7fb;
+  border: 1px solid #d6ddeb;
+  border-radius: 12px;
+  padding: 1.2rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.card h3 {
+  font-size: 1.05rem;
+  margin-bottom: 0.6rem;
+  color: #5887eb;
+  text-align: center;
+}
+
+.card p,
+.card li {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #7e80f7;
+}
+
+.card ol {
+  padding-left: 1.2rem;
+}
+
+.card-actions {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.btn {
+  flex: 1;
+  background-color: #dd5942;
+  color: white;
+  border: none;
+  padding: 12px 16px;
+  cursor: pointer;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 0.95rem;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  opacity: 0.85;
+}
+
+@media (max-width: 500px) {
+  .btn {
+    width: 100%;
+  }
+}

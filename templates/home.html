@@ -1,113 +1,27 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Welcome</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      body {
-        font-family: "Segoe UI", sans-serif;
-        background-color: #e1ece4;
-        color: #222;
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        padding: 2rem 1rem;
-      }
-
-      .container {
-        width: 100%;
-        max-width: 900px;
-        background-color: #ffffff;
-        border-radius: 12px;
-        padding: 2rem;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-      }
-
-      h1 {
-        text-align: center;
-        font-size: 1.8rem;
-        margin-bottom: 2rem;
-        color: #e53935;
-      }
-
-      .instructions {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1rem;
-        margin-bottom: 2rem;
-      }
-
-      .instruction-box {
-        background-color: #d4edda;
-        color: #155724;
-        border: 1px solid #c3e6cb;
-
-        padding: 1rem;
-        border-radius: 10px;
-        font-size: 0.95rem;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-        text-align: center;
-      }
-
-      .actions {
-        display: flex;
-        justify-content: center;
-        gap: 1rem;
-        flex-wrap: wrap;
-      }
-      .btn {
-        background-color: #eb3017;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        transition: background-color 0.3s ease;
-        cursor: pointer;
-        border-radius: 5px;
-        text-decoration: none;
-      }
-
-      .btn:hover {
-        background-color: #a31b09;
-      }
-
-      @media (max-width: 500px) {
-        .instruction-box {
-          font-size: 0.9rem;
-        }
-        .btn {
-          width: 100%;
-          text-align: center;
-        }
-      }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/static/home.css" />
+    <title>Homes</title>
   </head>
   <body>
-    <div class="container">
-      <h1>Selamat Datang</h1>
+    <header>
+      <h1>InvoiceGO</h1>
+      <a class="logout-btn" href="/logout" title="Login"> Login</a>
+    </header>
 
-      <div class="instructions">
-        <div class="instruction-box">
-          1. Unduh Laporan Penerimaan bulanan dari Web Simelon Pertamina dalam
-          bentuk Excel
-        </div>
-        <div class="instruction-box">2. Ekstrak file tanpa login</div>
-        <div class="instruction-box">
-          3. Login dengan Google untuk buat Invoice, isi form jika belum
-        </div>
-      </div>
+    <main>
+      <img
+        class="dashboard-img"
+        src="/static/images1.jpg"
+        alt="images1 Image"
+      />
 
-      <div class="actions">
-        <a class="btn" href="/login">Buat Invoice</a>
-        <a class="btn" href="/lo">Ekstrak LO</a>
-      </div>
-    </div>
+      <a href="/login" class="btn">Login with Google</a>
+    </main>
+
+    <footer>&copy; 2025 InvoiceGO. All rights reserved.</footer>
   </body>
 </html>

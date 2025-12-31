@@ -1,15 +1,4 @@
 services:
-  app:
-    build: .
-    ports:
-      - "8080:8080"
-    env_file:
-      - .env
-    environment:
-      - DATABASE_URL=postgresql://postgres:CHnQCPujAyrMdvBvNBufqCEHTXIWfvwC@switchback.proxy.rlwy.net:34792/railway?sslmode=require
-    depends_on:
-      - db
-
   db:
     image: postgres:15
     restart: always
@@ -18,9 +7,19 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: LuckyCode
     ports:
-      - "6543:5432"
+      - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    depends_on:
+      - db
 
 volumes:
   pgdata:

@@ -7,20 +7,21 @@ import (
 	"github.com/joho/godotenv"
 )
 
+// LoadEnv akan mencoba load file .env jika ada.
+// Tidak fatal jika file tidak ditemukan.
 func LoadEnv() {
 	err := godotenv.Load()
-
 	if err != nil {
-		log.Println("Error loading .env file")
+		log.Println("⚠️  .env file not found, skipping...")
 	}
 }
 
-	func GetEnv(key string) string {
-		value := os.Getenv(key)
-		if value ==""{
-			log.Fatalf("ENV %s is running", key)
-		}
-		return value
+// GetEnv mengambil value dari environment variable.
+// Fatal jika variable tidak ditemukan.
+func GetEnv(key string) string {
+	value := os.Getenv(key)
+	if value == "" {
+		log.Fatalf("❌ ENV %s is missing", key)
 	}
-
-
+	return value
+}

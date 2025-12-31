@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/static/dashboard.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="top-bar">
+        <div class="app-name">InvoiceGO</div>
+
+        <div class="profile-wrapper">
+          <div class="profile-avatar" onclick="toggleMenu()">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 12c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5z"
+                fill="white"
+              />
+              <path d="M4 20c0-4 4-6 8-6s8 2 8 6" fill="white" />
+            </svg>
+          </div>
+
+          <div id="profileMenu" class="profile-menu">
+            <a href="/setup">Edit Profil</a>
+            <a href="#" class="danger" onclick="confirmReset(event)"
+              >Reset Profil</a
+            >
+            <a href="/logout">Logout</a>
+
+            <form id="resetForm" method="POST" action="/dev/reset-setup"></form>
+          </div>
+        </div>
+      </div>
+
+      <h1>Welcome | Dashboard</h1>
+
+      <div class="cards">
+        <div class="card">
+          <h3>InvoiceGO</h3>
+          <p>
+            InvoiceGO adalah tool internal vendor Agen LPG 3 Kg yang memudahkan
+            pembuatan invoice dan rekap/report laporan melalui proses generate
+            file otomatis tanpa input manual.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Rekap Lo</h3>
+          <ol>
+            <li>Unduh Rekap Penerimaan Sim3lon</li>
+            <li>Pastikan unduhan file excel</li>
+            <li>Isi form & upload file excel</li>
+            <li>Preview Sebelum Download</li>
+          </ol>
+
+          <div class="card-actions">
+            <a class="btn" href="/report">Start</a>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Invoice</h3>
+          <ol>
+            <li>Buat Profil, Jika Belum</li>
+            <li>Pastikan mengisi form dengan benar</li>
+            <li>Generate</li>
+            <li>Preview Sebelum Download</li>
+          </ol>
+
+          <div class="card-actions">
+            <a class="btn" href="/invoice-form">Start</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function toggleMenu() {
+        const menu = document.getElementById("profileMenu");
+        menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+      }
+
+      function confirmReset(e) {
+        e.preventDefault();
+        if (
+          confirm(
+            "Yakin reset profil? ini akan menghapus data profil yang telah dibuat"
+          )
+        ) {
+          document.getElementById("resetForm").submit();
+        }
+      }
+
+      document.addEventListener("click", function (e) {
+        const avatar = document.querySelector(".profile-avatar");
+        const menu = document.getElementById("profileMenu");
+
+        if (!avatar.contains(e.target) && !menu.contains(e.target)) {
+          menu.style.display = "none";
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -3,13 +3,27 @@
   <head>
     <meta charset="UTF-8" />
     <title>Invoice Generator</title>
-    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/static/style.css" />
   </head>
+  <style>
+    .alert-success {
+      background: #e8f7ee;
+      color: #1e7f4f;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      border: 1px solid #bfe8d0;
+      font-size: 14px;
+    }
+  </style>
   <body style="text-align: center">
     <div class="container">
       <h1>Invoice Generator</h1>
+      {{if .success}}
+      <div class="alert-success">✔ Profil berhasil disimpan</div>
+      {{end}}
 
       <form hx-post="/generate" hx-target="#invoice" hx-swap="innerHTML">
         <div class="form-group">
@@ -50,17 +64,18 @@
 
         <div>
           <button type="submit">Print</button>
-          <a href="/setup"> Edit Profil </a>
         </div>
       </form>
     </div>
 
-    <div id="invoice">
-      <p>Preview Disini</p>
-    </div>
-
     <div style="text-align: center">
-      <a href="/">Home</a>
+      <a href="/dashboard">dashboard</a>
     </div>
   </body>
+  <script>
+    setTimeout(() => {
+      const el = document.querySelector(".alert-success");
+      if (el) el.remove();
+    }, 3000);
+  </script>
 </html>
