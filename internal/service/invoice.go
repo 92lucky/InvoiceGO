@@ -18,9 +18,11 @@ func ServiceInvoice(r *http.Request) (model.InvoiceData, error) {
 	}
 
 	qty, _ := strconv.ParseFloat(r.FormValue("quantity_kg"), 64)
-	dpp, _ := strconv.ParseFloat(r.FormValue("dpp"), 64)
 
-	displayQty, pokok, ppn, dpp, total := utils.HitungTagihan(qty, dpp)
+	// Kirim 0 dulu ke HitungTagihan kalau memang butuh param dpp
+	displayQty, pokok, ppn, _, total := utils.HitungTagihan(qty)
+
+
 
 	data := model.InvoiceData{
 		InvoiceNumber: r.FormValue("invoice_number"),
@@ -28,7 +30,6 @@ func ServiceInvoice(r *http.Request) (model.InvoiceData, error) {
 		Periode:       r.FormValue("periode"),
 		QuantityKG:    qty,
 		DisplayQty:    displayQty,
-		DPP:           dpp,
 		Pokok:         pokok,
 		PPN:           ppn,
 		Total:         total,
@@ -65,10 +66,10 @@ func GenerateInvoicePDF(w http.ResponseWriter, r *http.Request, isDownload bool)
 	invoiceDate := r.FormValue("invoice_date")
 	periode := r.FormValue("periode")
 	qty, _ := strconv.ParseFloat(r.FormValue("quantity_kg"), 64)
-	dppInput, _ := strconv.ParseFloat(r.FormValue("dpp"), 64)
+	
 
 	// Hitung tagihan
-	displayQty, pokok, ppn, dpp, total := utils.HitungTagihan(qty, dppInput)
+	displayQty, pokok, ppn, dpp, total := utils.HitungTagihan(qty)
 
 	data := model.InvoiceData{
 		InvoiceNumber: invoiceNumber,

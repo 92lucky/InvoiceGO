@@ -6,7 +6,7 @@ import (
 )
 
 //invoice count
-func HitungTagihan(qtyKg, dpp float64) (displayQty, pokok, ppn, dppOut, total float64) {
+func HitungTagihan(qtyKg float64) (displayQty, pokok, ppn, dppOut, total float64) {
 	const (
 		hargaSatuan  = 560.0
 		pengali      = 3.0
@@ -14,9 +14,16 @@ func HitungTagihan(qtyKg, dpp float64) (displayQty, pokok, ppn, dppOut, total fl
 	)
 
 	displayQty = qtyKg * hargaSatuan * pengali
-	pokok = displayQty * hargaPerGram
-	ppn = math.Round(dpp * 0.12)
-	dppOut = dpp
+
+	// Bulatkan pokok dulu
+	pokok = math.Round(displayQty * hargaPerGram)
+
+	// Hitung DPP dari pokok yang sudah bulat
+	dppOut = math.Round(pokok * 11.0 / 12.0)
+
+	// Hitung PPN dari DPP
+	ppn = math.Round(dppOut * 0.12)
+
 	total = pokok + ppn
 	return
 }

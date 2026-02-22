@@ -3,29 +3,116 @@
   <head>
     <meta charset="UTF-8" />
     <title>Invoice Generator</title>
-
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="/static/style.css" />
+    <link rel="stylesheet" href="/static/invoice.css" />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f5f5f5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+      }
+
+      .container {
+        background: #fff;
+        padding: 24px 32px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 400px;
+        position: relative;
+      }
+
+      h1 {
+        margin-top: 0;
+        margin-bottom: 24px;
+        font-size: 24px;
+        text-align: center;
+      }
+
+      .alert-success {
+        background: #e8f7ee;
+        color: #1e7f4f;
+        padding: 12px 16px;
+        border-radius: 8px;
+        margin-bottom: 16px;
+        border: 1px solid #bfe8d0;
+        font-size: 14px;
+        text-align: center;
+      }
+
+      .form-group {
+        margin-bottom: 16px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      label {
+        margin-bottom: 6px;
+        font-weight: bold;
+        font-size: 14px;
+      }
+
+      input {
+        padding: 8px 12px;
+        font-size: 14px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+      }
+
+      button[type="submit"] {
+        padding: 10px 16px;
+        font-size: 14px;
+        border: none;
+        border-radius: 8px;
+        background-color: #1e7f4f;
+        color: white;
+        cursor: pointer;
+        width: 100%;
+        margin-top: 12px;
+      }
+
+      button[type="submit"]:hover {
+        background-color: #16603a;
+      }
+
+      /* Tombol Back di kanan atas container, agak jauh dari form */
+      .back-btn {
+        position: absolute;
+        top: -12px; /* sedikit di atas container */
+        right: -12px; /* sedikit keluar container */
+        padding: 6px 12px;
+        background-color: #ccc;
+        color: #333;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 12px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      }
+
+      .back-btn:hover {
+        background-color: #aaa;
+      }
+    </style>
   </head>
-  <style>
-    .alert-success {
-      background: #e8f7ee;
-      color: #1e7f4f;
-      padding: 12px 16px;
-      border-radius: 8px;
-      margin-bottom: 16px;
-      border: 1px solid #bfe8d0;
-      font-size: 14px;
-    }
-  </style>
-  <body style="text-align: center">
+  <body>
+    <!-- Tombol Back di luar form -->
+    <button class="back-btn" onclick="window.location.href='/dashboard'">
+      Back
+    </button>
+
     <div class="container">
       <h1>Invoice Generator</h1>
+
       {{if .success}}
       <div class="alert-success">✔ Profil berhasil disimpan</div>
       {{end}}
 
-      <form hx-post="/generate" hx-target="#invoice" hx-swap="innerHTML">
+      <form method="POST" action="/generate" target="_blank">
         <div class="form-group">
           <label>No Invoice:</label>
           <input name="invoice_number" required />
@@ -52,30 +139,15 @@
           />
         </div>
 
-        <div class="form-group">
-          <label>DPP Dari Efaktur Pajak :</label>
-          <input
-            type="number"
-            name="dpp"
-            step="any"
-            placeholder="isi tanpa simbol"
-          />
-        </div>
-
-        <div>
-          <button type="submit">Print</button>
-        </div>
+        <button type="submit">Lihat</button>
       </form>
     </div>
 
-    <div style="text-align: center">
-      <a href="/dashboard">dashboard</a>
-    </div>
+    <script>
+      setTimeout(() => {
+        const el = document.querySelector(".alert-success");
+        if (el) el.remove();
+      }, 3000);
+    </script>
   </body>
-  <script>
-    setTimeout(() => {
-      const el = document.querySelector(".alert-success");
-      if (el) el.remove();
-    }, 3000);
-  </script>
 </html>

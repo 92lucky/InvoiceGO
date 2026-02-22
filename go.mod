@@ -10,6 +10,7 @@ require (
 	github.com/dustin/go-humanize v1.0.1
 	github.com/gorilla/csrf v1.7.3
 	github.com/gorilla/sessions v1.4.0
+	github.com/jung-kurt/gofpdf/v2 v2.17.3
 	github.com/lib/pq v1.10.9
 	github.com/stretchr/testify v1.10.0
 	github.com/xuri/excelize/v2 v2.9.1

@@ -23,10 +23,111 @@
         }
       }
     </script>
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f5f5f5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+      }
+
+      .container {
+        background: #fff;
+        padding: 24px 32px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 450px;
+        position: relative;
+      }
+
+      h2 {
+        margin-top: 0;
+        margin-bottom: 24px;
+        font-size: 22px;
+        text-align: center;
+      }
+
+      .form-group {
+        margin-bottom: 16px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      label {
+        margin-bottom: 6px;
+        font-weight: bold;
+        font-size: 14px;
+      }
+
+      input[type="text"],
+      input[type="file"] {
+        padding: 8px 12px;
+        font-size: 14px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+      }
+
+      button[type="submit"] {
+        padding: 10px 16px;
+        font-size: 14px;
+        border: none;
+        border-radius: 8px;
+        background-color: #1e7f4f;
+        color: white;
+        cursor: pointer;
+        width: 100%;
+        margin-top: 12px;
+      }
+
+      button[type="submit"]:hover {
+        background-color: #16603a;
+      }
+
+      /* Tombol Back di kanan atas container, tapi agak jauh dari form */
+      .back-btn {
+        position: absolute;
+        top: -12px; /* agak di atas container */
+        right: -12px; /* sedikit keluar container */
+        padding: 6px 12px;
+        background-color: #ccc;
+        color: #333;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 12px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      }
+
+      .back-btn:hover {
+        background-color: #aaa;
+      }
+
+      /* Checkbox mode download */
+      .mode-download {
+        display: inline-flex;
+        align-items: center;
+        margin-bottom: 12px;
+        font-size: 13px;
+      }
+
+      .mode-download input {
+        margin-right: 6px;
+      }
+    </style>
   </head>
   <body>
+    <!-- Tombol Back di luar form, tetap di kanan atas container -->
+    <button class="back-btn" onclick="window.location.href='/dashboard'">
+      Back
+    </button>
+
     <div class="container">
-      <h2>Upload Laporan Operasional</h2>
+      <h2>Laporan Operasional</h2>
 
       <!-- FORM -->
       <form
@@ -35,7 +136,6 @@
         action="/previewLo"
         target="_blank"
         enctype="multipart/form-data"
-        style="margin: 10px"
       >
         <!-- Bulan -->
         <div class="form-group">
@@ -61,23 +161,13 @@
         </div>
 
         <!-- Pilihan: Preview atau Download -->
-        <div style="display: inline-flex; align-items: center">
-          <input
-            style="margin-right: 6px"
-            type="checkbox"
-            onchange="ubahAksi(this.checked)"
-          />
-          <label style="font-size: small">Mode Download</label>
+        <div class="mode-download">
+          <input type="checkbox" onchange="ubahAksi(this.checked)" />
+          <label>Mode Download</label>
         </div>
 
-        <div>
-          <button id="submitBtn" type="submit">🔍 Preview</button>
-        </div>
+        <button id="submitBtn" type="submit">🔍 Preview</button>
       </form>
-    </div>
-
-    <div class="text-center mt-4">
-      <a href="/dashboard">dashboard</a>
     </div>
   </body>
 </html>
