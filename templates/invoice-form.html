@@ -6,148 +6,213 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/static/invoice.css" />
     <style>
-      body {
-        font-family: Arial, sans-serif;
-        background: #f5f5f5;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-        margin: 0;
-      }
+     
+  * {
+    box-sizing: border-box;
+  }
 
-      .container {
-        background: #fff;
-        padding: 24px 32px;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        width: 100%;
-        max-width: 400px;
-        position: relative;
-      }
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+  }
 
-      h1 {
-        margin-top: 0;
-        margin-bottom: 24px;
-        font-size: 24px;
-        text-align: center;
-      }
+  body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f9;
+  }
 
-      .alert-success {
-        background: #e8f7ee;
-        color: #1e7f4f;
-        padding: 12px 16px;
-        border-radius: 8px;
-        margin-bottom: 16px;
-        border: 1px solid #bfe8d0;
-        font-size: 14px;
-        text-align: center;
-      }
+  .app {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+  }
 
-      .form-group {
-        margin-bottom: 16px;
-        display: flex;
-        flex-direction: column;
-      }
+  /* SIDEBAR 30% */
+  .sidebar {
+    width: 30%;
+    min-width: 300px;
+    background: #ffffff;
+    padding: 30px;
+    border-right: 1px solid #e5e7eb;
+    display: flex;
+    flex-direction: column;
+  }
 
-      label {
-        margin-bottom: 6px;
-        font-weight: bold;
-        font-size: 14px;
-      }
+  /* MAIN CONTENT 70% */
 
-      input {
-        padding: 8px 12px;
-        font-size: 14px;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-      }
+  .back-btn {
+  position: absolute;
+  bottom: 20px;
+  left: 30px;
+  padding: 6px 14px;
+  background: #e5e7eb;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.2s ease;
+}
 
-      button[type="submit"] {
-        padding: 10px 16px;
-        font-size: 14px;
-        border: none;
-        border-radius: 8px;
-        background-color: #1e7f4f;
-        color: white;
-        cursor: pointer;
-        width: 100%;
-        margin-top: 12px;
-      }
+.back-btn:hover {
+  background: #d1d5db;
+}
 
-      button[type="submit"]:hover {
-        background-color: #16603a;
-      }
+  .main-content {
+    width: 70%;
+    padding: 0;
+    background: #eef1f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
-      /* Tombol Back di kanan atas container, agak jauh dari form */
-      .back-btn {
-        position: absolute;
-        top: -12px; /* sedikit di atas container */
-        right: -12px; /* sedikit keluar container */
-        padding: 6px 12px;
-        background-color: #ccc;
-        color: #333;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 12px;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-      }
+  .preview-wrapper {
+    width: 95%;
+    height: 95%;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+  }
 
-      .back-btn:hover {
-        background-color: #aaa;
-      }
-    </style>
-  </head>
+  .preview-wrapper iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+  }
+
+  .form-group label {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+
+  .form-group input {
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .action-buttons button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    color: white;
+  }
+
+  .preview-btn {
+    background: #2563eb;
+  }
+
+  .download-btn {
+    background: #16a34a;
+  }
+</style> 
   <body>
     <!-- Tombol Back di luar form -->
-    <button class="back-btn" onclick="window.location.href='/dashboard'">
-      Back
-    </button>
 
-    <div class="container">
-      <h1>Invoice Generator</h1>
+    <div class="app">
+      <!-- SIDEBAR -->
+      <div class="sidebar">
+        <h2>Invoice Generator</h2>
 
-      {{if .success}}
-      <div class="alert-success">✔ Profil berhasil disimpan</div>
-      {{end}}
+        <form id="invoice-form">
+          <div class="form-group">
+            <label>No Invoice</label>
+            <input name="invoice_number" required />
+          </div>
 
-      <form method="POST" action="/generate" target="_blank">
-        <div class="form-group">
-          <label>No Invoice:</label>
-          <input name="invoice_number" required />
+          <div class="form-group">
+            <label>Periode</label>
+            <input type="text" name="periode" />
+          </div>
+
+          <div class="form-group">
+            <label>Tanggal</label>
+            <input type="date" name="invoice_date" required />
+          </div>
+
+          <div class="form-group">
+            <label>Quantity (Kg)</label>
+            <input type="number" name="quantity_kg" step="any" required />
+          </div>
+
+          <div class="action-buttons">
+            <button type="button" class="preview-btn" onclick="previewPDF()">
+              Preview
+            </button>
+            <button type="button" class="download-btn" onclick="downloadPDF()">
+              Download
+            </button>
+          </div>
+        </form>
+
+        <button class="back-btn" onclick="window.location.href='/dashboard'">
+          Back
+        </button>
+
+      <!-- MAIN CONTENT -->
+      <div class="main-content">
+        <div class="preview-wrapper">
+          <iframe id="pdfViewer"></iframe>
         </div>
-
-        <div class="form-group">
-          <label>Periode:</label>
-          <input type="text" name="periode" placeholder="contoh: Juli 2025" />
-        </div>
-
-        <div class="form-group">
-          <label>Tanggal:</label>
-          <input type="date" name="invoice_date" required />
-        </div>
-
-        <div class="form-group">
-          <label>Quantity (Kg):</label>
-          <input
-            type="number"
-            name="quantity_kg"
-            step="any"
-            placeholder="Jumlah Angkut Armada"
-            required
-          />
-        </div>
-
-        <button type="submit">Lihat</button>
-      </form>
+      </div>
     </div>
-
     <script>
       setTimeout(() => {
         const el = document.querySelector(".alert-success");
         if (el) el.remove();
       }, 3000);
+
+      async function previewPDF() {
+        const form = document.getElementById("invoice-form");
+        const formData = new FormData(form);
+
+        const response = await fetch("/invoice/pdf", {
+          method: "POST",
+          body: formData,
+        });
+
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+
+        document.getElementById("pdfViewer").src = url;
+      }
+
+      async function downloadPDF() {
+        const form = document.getElementById("invoice-form");
+        const formData = new FormData(form);
+
+        const response = await fetch("/invoice/pdf?download=true", {
+          method: "POST",
+          body: formData,
+        });
+
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "invoice.pdf";
+        a.click();
+
+        URL.revokeObjectURL(url);
+      }
     </script>
   </body>
 </html>

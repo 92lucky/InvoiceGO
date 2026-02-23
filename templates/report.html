@@ -3,171 +3,181 @@
   <head>
     <meta charset="UTF-8" />
     <title>Generate LO PDF</title>
-    <link rel="stylesheet" href="/static/style.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
-
-    <script>
-      function ubahAksi(isDownload) {
-        const form = document.getElementById("uploadForm");
-        const tombol = document.getElementById("submitBtn");
-        if (isDownload) {
-          form.action = "/downloadLo";
-          form.target = "_self"; // langsung download
-          tombol.innerText = "⬇️ Download";
-        } else {
-          form.action = "/previewLo";
-          form.target = "_blank"; // buka tab baru
-          tombol.innerText = "🔍 Preview";
-        }
-      }
-    </script>
-
     <style>
-      body {
-        font-family: Arial, sans-serif;
-        background: #f5f5f5;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-        margin: 0;
+      * {
+        box-sizing: border-box;
       }
 
-      .container {
-        background: #fff;
-        padding: 24px 32px;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        width: 100%;
-        max-width: 450px;
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        font-family: Arial, sans-serif;
+      }
+
+      .app {
+        position: fixed;
+        inset: 0;
+        display: flex;
+      }
+
+      /* SIDEBAR 30% */
+      .sidebar {
+        flex: 0 0 30%;
+        min-width: 320px;
+        background: #ffffff;
+        padding: 30px;
+        border-right: 1px solid #e5e7eb;
+        overflow-y: auto;
         position: relative;
       }
 
-      h2 {
+      .sidebar h2 {
         margin-top: 0;
-        margin-bottom: 24px;
-        font-size: 22px;
-        text-align: center;
+        margin-bottom: 25px;
       }
 
       .form-group {
-        margin-bottom: 16px;
+        margin-bottom: 18px;
         display: flex;
         flex-direction: column;
       }
 
-      label {
+      .form-group label {
         margin-bottom: 6px;
-        font-weight: bold;
+        font-weight: 600;
         font-size: 14px;
       }
 
       input[type="text"],
       input[type="file"] {
-        padding: 8px 12px;
-        font-size: 14px;
+        padding: 8px 10px;
         border-radius: 6px;
         border: 1px solid #ccc;
-      }
-
-      button[type="submit"] {
-        padding: 10px 16px;
         font-size: 14px;
-        border: none;
-        border-radius: 8px;
-        background-color: #1e7f4f;
-        color: white;
-        cursor: pointer;
-        width: 100%;
-        margin-top: 12px;
       }
 
-      button[type="submit"]:hover {
-        background-color: #16603a;
+      .action-buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
       }
 
-      /* Tombol Back di kanan atas container, tapi agak jauh dari form */
-      .back-btn {
-        position: absolute;
-        top: -12px; /* agak di atas container */
-        right: -12px; /* sedikit keluar container */
-        padding: 6px 12px;
-        background-color: #ccc;
-        color: #333;
+      .action-buttons button {
+        flex: 1;
+        padding: 10px;
         border: none;
         border-radius: 6px;
         cursor: pointer;
-        font-size: 12px;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        color: white;
+        font-size: 14px;
+      }
+
+      .preview-btn {
+        background: #2563eb;
+      }
+
+      .download-btn {
+        background: #16a34a;
+      }
+
+      .preview-btn:hover {
+        background: #1d4ed8;
+      }
+
+      .download-btn:hover {
+        background: #15803d;
+      }
+
+      /* MAIN AREA 70% */
+      .main-content {
+        flex: 1;
+        background: #eef2f7;
+        padding: 20px;
+        display: flex;
+      }
+
+      .preview-frame {
+        width: 100%;
+        height: 100%;
+        border: none;
+        border-radius: 8px;
+        background: white;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      }
+
+      .back-btn {
+        position: absolute;
+        bottom: 20px;
+        left: 30px;
+        padding: 6px 12px;
+        background: #e5e7eb;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
       }
 
       .back-btn:hover {
-        background-color: #aaa;
-      }
-
-      /* Checkbox mode download */
-      .mode-download {
-        display: inline-flex;
-        align-items: center;
-        margin-bottom: 12px;
-        font-size: 13px;
-      }
-
-      .mode-download input {
-        margin-right: 6px;
+        background: #d1d5db;
       }
     </style>
   </head>
+
   <body>
-    <!-- Tombol Back di luar form, tetap di kanan atas container -->
-    <button class="back-btn" onclick="window.location.href='/dashboard'">
-      Back
-    </button>
+    <div class="app">
+      <!-- SIDEBAR -->
+      <div class="sidebar">
+        <h2>Laporan Operasional</h2>
 
-    <div class="container">
-      <h2>Laporan Operasional</h2>
+        <form method="post" enctype="multipart/form-data">
+          <div class="form-group">
+            <label>Bulan / Periode</label>
+            <input type="text" name="bulan" required />
+          </div>
 
-      <!-- FORM -->
-      <form
-        id="uploadForm"
-        method="post"
-        action="/previewLo"
-        target="_blank"
-        enctype="multipart/form-data"
-      >
-        <!-- Bulan -->
-        <div class="form-group">
-          <label>Bulan / Periode</label>
-          <input type="text" name="bulan" required />
-        </div>
+          <div class="form-group">
+            <label>Nama PT</label>
+            <input type="text" name="namapt" required />
+          </div>
 
-        <!-- Nama PT -->
-        <div class="form-group">
-          <label>Nama PT</label>
-          <input
-            type="text"
-            name="namapt"
-            placeholder="Contoh: PT Contoh Sejahtera"
-            required
-          />
-        </div>
+          <div class="form-group">
+            <label>Upload File Excel</label>
+            <input type="file" name="file" accept=".xlsx,.xls" required />
+          </div>
 
-        <!-- File Upload -->
-        <div class="form-group">
-          <label>Upload File Excel</label>
-          <input type="file" name="file" accept=".xlsx,.xls" required />
-        </div>
+          <div class="action-buttons">
+            <button
+              type="submit"
+              class="preview-btn"
+              formaction="/previewLo"
+              formtarget="previewFrame"
+            >
+              Preview
+            </button>
 
-        <!-- Pilihan: Preview atau Download -->
-        <div class="mode-download">
-          <input type="checkbox" onchange="ubahAksi(this.checked)" />
-          <label>Mode Download</label>
-        </div>
+            <button
+              type="submit"
+              class="download-btn"
+              formaction="/downloadLo"
+              formtarget="_self"
+            >
+              Download
+            </button>
+          </div>
+        </form>
 
-        <button id="submitBtn" type="submit">🔍 Preview</button>
-      </form>
+        <button class="back-btn" onclick="window.location.href='/dashboard'">
+          Back
+        </button>
+      </div>
+
+      <!-- MAIN CONTENT -->
+      <div class="main-content">
+        <iframe name="previewFrame" class="preview-frame"></iframe>
+      </div>
     </div>
   </body>
 </html>

@@ -26,6 +26,7 @@ func RegisterAppRoutes(mux *http.ServeMux, tmpl *template.Template, db *sql.DB) 
 	mux.HandleFunc("/invoice-form", auth.RequireAuth(handlers.HandleIndex(tmpl, db)))
 	mux.HandleFunc("/generate", auth.RequireAuth(handlers.HandlersInvoice(tmpl)))
 	mux.HandleFunc("/generate-pdf", auth.RequireAuth(handlers.InvoicePDFHandler))
+	mux.HandleFunc("/invoice/pdf", auth.RequireAuth(handlers.InvoicePDFHandler))
 	
 	//template handle
 	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))

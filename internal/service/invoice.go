@@ -57,7 +57,7 @@ func GenerateInvoicePDF(w http.ResponseWriter, r *http.Request, isDownload bool)
 	}
 
 	// Parse form
-	if err := r.ParseForm(); err != nil {
+	if err := r.ParseMultipartForm(10 << 20); err != nil  {
 		return fmt.Errorf("gagal parsing form: %v", err)
 	}
 
